@@ -96,7 +96,6 @@
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="clsNeedleTimeCounter.vb" />
-    <Compile Include="clsComBoard.vb" />
     <Compile Include="clsPlayTimer.vb" />
     <Compile Include="clsSettings.vb" />
     <Compile Include="clsUsbRelayDevice.vb" />
@@ -172,8 +171,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="GUIapp.cpp" />
-    <Content Include="icon.ico" />
     <Content Include="S.ico" />
     <Content Include="USB_RELAY_DEVICE.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

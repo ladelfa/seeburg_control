@@ -6,8 +6,8 @@
   Public StartHTTPAtStartup As Boolean = False
   Public StatusCgiUrl As String = "http://www.seeburgremote.net/set_jukebox_status.rb?jukebox=seeburg&status="
   Public Port_Audio As Integer = 8080
-    Public SetStatusToStandbyAtStartup As Boolean = False ' was True
-    Public PowerDownWhenNoConnections = False ' was True
-    Public PowerDownWhenNoConnectionsAfterNnMinutes = 1
+  Public SetStatusToStandbyAtStartup As Boolean = True
+  Public PowerDownWhenNoConnections = True
+  Public PowerDownWhenNoConnectionsAfterNnMinutes = 1
   Public DefaultMinutesToAddViaButton = 20
 End Class
