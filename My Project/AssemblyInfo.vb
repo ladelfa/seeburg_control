@@ -11,8 +11,8 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyTitle("SeeburgControl")> 
 <Assembly: AssemblyDescription("Web-Jukebox Interface")> 
 <Assembly: AssemblyCompany("Dave LaDelfa")> 
-<Assembly: AssemblyProduct("SeeburgControl")> 
-<Assembly: AssemblyCopyright("Copyright © 2011 Dave LaDelfa")> 
+<Assembly: AssemblyProduct("SeeburgControl")>
+<Assembly: AssemblyCopyright("Copyright © 2011, 2016 Dave LaDelfa")>
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>

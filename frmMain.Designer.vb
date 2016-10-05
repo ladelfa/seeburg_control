@@ -26,29 +26,13 @@ Partial Class frmMain
     Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
     Me.cmdQuit = New System.Windows.Forms.Button()
     Me.GroupBox3 = New System.Windows.Forms.GroupBox()
-    Me.chkIO_7 = New System.Windows.Forms.CheckBox()
-    Me.chkIO_6 = New System.Windows.Forms.CheckBox()
-    Me.lnkResetCounter = New System.Windows.Forms.LinkLabel()
-    Me.txtCounter = New System.Windows.Forms.TextBox()
-    Me.radIO_4 = New System.Windows.Forms.RadioButton()
-    Me.radIO_5 = New System.Windows.Forms.RadioButton()
-    Me.chkKeepIOsUpdated = New System.Windows.Forms.CheckBox()
-    Me.cmdVersion = New System.Windows.Forms.Button()
-    Me.txtComPort = New System.Windows.Forms.TextBox()
-    Me.lnkClearComLog = New System.Windows.Forms.LinkLabel()
-    Me.chkShowComLog = New System.Windows.Forms.CheckBox()
-    Me.txtComLog = New System.Windows.Forms.TextBox()
-    Me.cmdQuery = New System.Windows.Forms.Button()
-    Me.txtQuery = New System.Windows.Forms.TextBox()
-    Me.Relay = New System.Windows.Forms.Button()
-    Me.ComOpen = New System.Windows.Forms.Button()
+    Me.cboDevices = New System.Windows.Forms.ComboBox()
     Me.GroupBox1 = New System.Windows.Forms.GroupBox()
     Me.cmdRelayMomentary_1 = New System.Windows.Forms.Button()
     Me.chkRelayStatus1 = New System.Windows.Forms.CheckBox()
     Me.GroupBox2 = New System.Windows.Forms.GroupBox()
     Me.cmdRelayMomentary_2 = New System.Windows.Forms.Button()
     Me.chkRelayStatus2 = New System.Windows.Forms.CheckBox()
-    Me.ComClose = New System.Windows.Forms.Button()
     Me.GroupBox4 = New System.Windows.Forms.GroupBox()
     Me.chkAutoStartHTTP = New System.Windows.Forms.CheckBox()
     Me.lnkClearHTTPLog = New System.Windows.Forms.LinkLabel()
@@ -90,11 +74,10 @@ Partial Class frmMain
     Me.txtAudioConnections = New System.Windows.Forms.TextBox()
     Me.txtAudioPort = New System.Windows.Forms.TextBox()
     Me.chkUpdateNeedleTime = New System.Windows.Forms.CheckBox()
-    Me.timerScanIO = New System.Windows.Forms.Timer(Me.components)
     Me.GroupBox8 = New System.Windows.Forms.GroupBox()
+    Me.chkUseRunoutSaver = New System.Windows.Forms.CheckBox()
     Me.CheckBox1 = New System.Windows.Forms.CheckBox()
     Me.timerRunoutSaver = New System.Windows.Forms.Timer(Me.components)
-    Me.chkUseRunoutSaver = New System.Windows.Forms.CheckBox()
     Me.GroupBox3.SuspendLayout()
     Me.GroupBox1.SuspendLayout()
     Me.GroupBox2.SuspendLayout()
@@ -108,7 +91,7 @@ Partial Class frmMain
     '
     'cmdQuit
     '
-    Me.cmdQuit.Location = New System.Drawing.Point(935, 500)
+    Me.cmdQuit.Location = New System.Drawing.Point(758, 495)
     Me.cmdQuit.Name = "cmdQuit"
     Me.cmdQuit.Size = New System.Drawing.Size(77, 24)
     Me.cmdQuit.TabIndex = 11
@@ -117,204 +100,39 @@ Partial Class frmMain
     '
     'GroupBox3
     '
-    Me.GroupBox3.Controls.Add(Me.chkIO_7)
-    Me.GroupBox3.Controls.Add(Me.chkIO_6)
-    Me.GroupBox3.Controls.Add(Me.lnkResetCounter)
-    Me.GroupBox3.Controls.Add(Me.txtCounter)
-    Me.GroupBox3.Controls.Add(Me.radIO_4)
-    Me.GroupBox3.Controls.Add(Me.radIO_5)
-    Me.GroupBox3.Controls.Add(Me.chkKeepIOsUpdated)
-    Me.GroupBox3.Controls.Add(Me.cmdVersion)
-    Me.GroupBox3.Controls.Add(Me.txtComPort)
-    Me.GroupBox3.Controls.Add(Me.lnkClearComLog)
-    Me.GroupBox3.Controls.Add(Me.chkShowComLog)
-    Me.GroupBox3.Controls.Add(Me.txtComLog)
-    Me.GroupBox3.Controls.Add(Me.cmdQuery)
-    Me.GroupBox3.Controls.Add(Me.txtQuery)
-    Me.GroupBox3.Controls.Add(Me.Relay)
-    Me.GroupBox3.Controls.Add(Me.ComOpen)
+    Me.GroupBox3.Controls.Add(Me.cboDevices)
     Me.GroupBox3.Controls.Add(Me.GroupBox1)
     Me.GroupBox3.Controls.Add(Me.GroupBox2)
-    Me.GroupBox3.Controls.Add(Me.ComClose)
     Me.GroupBox3.Location = New System.Drawing.Point(426, 12)
     Me.GroupBox3.Name = "GroupBox3"
-    Me.GroupBox3.Size = New System.Drawing.Size(391, 374)
+    Me.GroupBox3.Size = New System.Drawing.Size(223, 195)
     Me.GroupBox3.TabIndex = 16
     Me.GroupBox3.TabStop = False
-    Me.GroupBox3.Text = "USB I/O"
+    Me.GroupBox3.Text = "USB Relay Device"
     '
-    'chkIO_7
+    'cboDevices
     '
-    Me.chkIO_7.AutoSize = True
-    Me.chkIO_7.Location = New System.Drawing.Point(263, 288)
-    Me.chkIO_7.Name = "chkIO_7"
-    Me.chkIO_7.Size = New System.Drawing.Size(46, 17)
-    Me.chkIO_7.TabIndex = 37
-    Me.chkIO_7.Text = "IO 7"
-    Me.chkIO_7.UseVisualStyleBackColor = True
-    '
-    'chkIO_6
-    '
-    Me.chkIO_6.AutoSize = True
-    Me.chkIO_6.Location = New System.Drawing.Point(263, 268)
-    Me.chkIO_6.Name = "chkIO_6"
-    Me.chkIO_6.Size = New System.Drawing.Size(46, 17)
-    Me.chkIO_6.TabIndex = 36
-    Me.chkIO_6.Text = "IO 6"
-    Me.chkIO_6.UseVisualStyleBackColor = True
-    '
-    'lnkResetCounter
-    '
-    Me.lnkResetCounter.AutoSize = True
-    Me.lnkResetCounter.Location = New System.Drawing.Point(338, 317)
-    Me.lnkResetCounter.Name = "lnkResetCounter"
-    Me.lnkResetCounter.Size = New System.Drawing.Size(35, 13)
-    Me.lnkResetCounter.TabIndex = 35
-    Me.lnkResetCounter.TabStop = True
-    Me.lnkResetCounter.Text = "Reset"
-    '
-    'txtCounter
-    '
-    Me.txtCounter.Enabled = False
-    Me.txtCounter.Location = New System.Drawing.Point(263, 314)
-    Me.txtCounter.Name = "txtCounter"
-    Me.txtCounter.ReadOnly = True
-    Me.txtCounter.Size = New System.Drawing.Size(60, 20)
-    Me.txtCounter.TabIndex = 34
-    Me.txtCounter.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-    '
-    'radIO_4
-    '
-    Me.radIO_4.AutoSize = True
-    Me.radIO_4.Location = New System.Drawing.Point(263, 225)
-    Me.radIO_4.Name = "radIO_4"
-    Me.radIO_4.Size = New System.Drawing.Size(45, 17)
-    Me.radIO_4.TabIndex = 33
-    Me.radIO_4.TabStop = True
-    Me.radIO_4.Text = "IO 4"
-    Me.radIO_4.UseVisualStyleBackColor = True
-    '
-    'radIO_5
-    '
-    Me.radIO_5.AutoSize = True
-    Me.radIO_5.Location = New System.Drawing.Point(263, 246)
-    Me.radIO_5.Name = "radIO_5"
-    Me.radIO_5.Size = New System.Drawing.Size(45, 17)
-    Me.radIO_5.TabIndex = 32
-    Me.radIO_5.TabStop = True
-    Me.radIO_5.Text = "IO 5"
-    Me.radIO_5.UseVisualStyleBackColor = True
-    '
-    'chkKeepIOsUpdated
-    '
-    Me.chkKeepIOsUpdated.AutoSize = True
-    Me.chkKeepIOsUpdated.Checked = True
-    Me.chkKeepIOsUpdated.CheckState = System.Windows.Forms.CheckState.Checked
-    Me.chkKeepIOsUpdated.Location = New System.Drawing.Point(263, 344)
-    Me.chkKeepIOsUpdated.Name = "chkKeepIOsUpdated"
-    Me.chkKeepIOsUpdated.Size = New System.Drawing.Size(114, 17)
-    Me.chkKeepIOsUpdated.TabIndex = 30
-    Me.chkKeepIOsUpdated.Text = "Keep IOs Updated"
-    Me.chkKeepIOsUpdated.UseVisualStyleBackColor = True
-    '
-    'cmdVersion
-    '
-    Me.cmdVersion.Location = New System.Drawing.Point(260, 158)
-    Me.cmdVersion.Name = "cmdVersion"
-    Me.cmdVersion.Size = New System.Drawing.Size(81, 23)
-    Me.cmdVersion.TabIndex = 28
-    Me.cmdVersion.Text = "Version"
-    Me.cmdVersion.UseVisualStyleBackColor = True
-    '
-    'txtComPort
-    '
-    Me.txtComPort.Enabled = False
-    Me.txtComPort.Location = New System.Drawing.Point(260, 30)
-    Me.txtComPort.Name = "txtComPort"
-    Me.txtComPort.Size = New System.Drawing.Size(78, 20)
-    Me.txtComPort.TabIndex = 27
-    Me.txtComPort.Text = "81"
-    '
-    'lnkClearComLog
-    '
-    Me.lnkClearComLog.AutoSize = True
-    Me.lnkClearComLog.Location = New System.Drawing.Point(210, 191)
-    Me.lnkClearComLog.Name = "lnkClearComLog"
-    Me.lnkClearComLog.Size = New System.Drawing.Size(31, 13)
-    Me.lnkClearComLog.TabIndex = 26
-    Me.lnkClearComLog.TabStop = True
-    Me.lnkClearComLog.Text = "Clear"
-    '
-    'chkShowComLog
-    '
-    Me.chkShowComLog.AutoSize = True
-    Me.chkShowComLog.Checked = True
-    Me.chkShowComLog.CheckState = System.Windows.Forms.CheckState.Checked
-    Me.chkShowComLog.Location = New System.Drawing.Point(30, 191)
-    Me.chkShowComLog.Name = "chkShowComLog"
-    Me.chkShowComLog.Size = New System.Drawing.Size(74, 17)
-    Me.chkShowComLog.TabIndex = 25
-    Me.chkShowComLog.Text = "Show Log"
-    Me.chkShowComLog.UseVisualStyleBackColor = True
-    '
-    'txtComLog
-    '
-    Me.txtComLog.Location = New System.Drawing.Point(25, 30)
-    Me.txtComLog.Multiline = True
-    Me.txtComLog.Name = "txtComLog"
-    Me.txtComLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-    Me.txtComLog.Size = New System.Drawing.Size(216, 151)
-    Me.txtComLog.TabIndex = 19
-    '
-    'cmdQuery
-    '
-    Me.cmdQuery.Location = New System.Drawing.Point(199, 213)
-    Me.cmdQuery.Name = "cmdQuery"
-    Me.cmdQuery.Size = New System.Drawing.Size(42, 21)
-    Me.cmdQuery.TabIndex = 24
-    Me.cmdQuery.Text = "Go"
-    Me.cmdQuery.UseVisualStyleBackColor = True
-    '
-    'txtQuery
-    '
-    Me.txtQuery.Location = New System.Drawing.Point(25, 214)
-    Me.txtQuery.Name = "txtQuery"
-    Me.txtQuery.Size = New System.Drawing.Size(163, 20)
-    Me.txtQuery.TabIndex = 23
-    '
-    'Relay
-    '
-    Me.Relay.Enabled = False
-    Me.Relay.Location = New System.Drawing.Point(260, 129)
-    Me.Relay.Name = "Relay"
-    Me.Relay.Size = New System.Drawing.Size(81, 23)
-    Me.Relay.TabIndex = 20
-    Me.Relay.Text = "Test Relays"
-    Me.Relay.UseVisualStyleBackColor = True
-    '
-    'ComOpen
-    '
-    Me.ComOpen.Location = New System.Drawing.Point(261, 70)
-    Me.ComOpen.Name = "ComOpen"
-    Me.ComOpen.Size = New System.Drawing.Size(80, 24)
-    Me.ComOpen.TabIndex = 17
-    Me.ComOpen.Text = "Open Port"
-    Me.ComOpen.UseVisualStyleBackColor = True
+    Me.cboDevices.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+    Me.cboDevices.FormattingEnabled = True
+    Me.cboDevices.Location = New System.Drawing.Point(15, 19)
+    Me.cboDevices.Name = "cboDevices"
+    Me.cboDevices.Size = New System.Drawing.Size(99, 21)
+    Me.cboDevices.TabIndex = 23
     '
     'GroupBox1
     '
     Me.GroupBox1.Controls.Add(Me.cmdRelayMomentary_1)
     Me.GroupBox1.Controls.Add(Me.chkRelayStatus1)
-    Me.GroupBox1.Location = New System.Drawing.Point(25, 246)
+    Me.GroupBox1.Location = New System.Drawing.Point(15, 54)
     Me.GroupBox1.Name = "GroupBox1"
-    Me.GroupBox1.Size = New System.Drawing.Size(103, 88)
+    Me.GroupBox1.Size = New System.Drawing.Size(194, 57)
     Me.GroupBox1.TabIndex = 21
     Me.GroupBox1.TabStop = False
-    Me.GroupBox1.Text = "Relay 1"
+    Me.GroupBox1.Text = "Relay 1 (Reject/Scan)"
     '
     'cmdRelayMomentary_1
     '
-    Me.cmdRelayMomentary_1.Location = New System.Drawing.Point(16, 51)
+    Me.cmdRelayMomentary_1.Location = New System.Drawing.Point(88, 19)
     Me.cmdRelayMomentary_1.Name = "cmdRelayMomentary_1"
     Me.cmdRelayMomentary_1.Size = New System.Drawing.Size(75, 23)
     Me.cmdRelayMomentary_1.TabIndex = 13
@@ -336,16 +154,16 @@ Partial Class frmMain
     '
     Me.GroupBox2.Controls.Add(Me.cmdRelayMomentary_2)
     Me.GroupBox2.Controls.Add(Me.chkRelayStatus2)
-    Me.GroupBox2.Location = New System.Drawing.Point(138, 246)
+    Me.GroupBox2.Location = New System.Drawing.Point(15, 117)
     Me.GroupBox2.Name = "GroupBox2"
-    Me.GroupBox2.Size = New System.Drawing.Size(103, 88)
+    Me.GroupBox2.Size = New System.Drawing.Size(194, 57)
     Me.GroupBox2.TabIndex = 22
     Me.GroupBox2.TabStop = False
-    Me.GroupBox2.Text = "Relay 2"
+    Me.GroupBox2.Text = "Relay 2 (Power)"
     '
     'cmdRelayMomentary_2
     '
-    Me.cmdRelayMomentary_2.Location = New System.Drawing.Point(16, 51)
+    Me.cmdRelayMomentary_2.Location = New System.Drawing.Point(89, 19)
     Me.cmdRelayMomentary_2.Name = "cmdRelayMomentary_2"
     Me.cmdRelayMomentary_2.Size = New System.Drawing.Size(75, 23)
     Me.cmdRelayMomentary_2.TabIndex = 13
@@ -362,16 +180,6 @@ Partial Class frmMain
     Me.chkRelayStatus2.TabIndex = 0
     Me.chkRelayStatus2.Text = "Status"
     Me.chkRelayStatus2.UseVisualStyleBackColor = True
-    '
-    'ComClose
-    '
-    Me.ComClose.Enabled = False
-    Me.ComClose.Location = New System.Drawing.Point(260, 100)
-    Me.ComClose.Name = "ComClose"
-    Me.ComClose.Size = New System.Drawing.Size(81, 23)
-    Me.ComClose.TabIndex = 18
-    Me.ComClose.Text = "Close Port"
-    Me.ComClose.UseVisualStyleBackColor = True
     '
     'GroupBox4
     '
@@ -620,7 +428,7 @@ Partial Class frmMain
     Me.grboxState.Controls.Add(Me.cmdStatePublic30)
     Me.grboxState.Location = New System.Drawing.Point(426, 397)
     Me.grboxState.Name = "grboxState"
-    Me.grboxState.Size = New System.Drawing.Size(391, 83)
+    Me.grboxState.Size = New System.Drawing.Size(409, 83)
     Me.grboxState.TabIndex = 20
     Me.grboxState.TabStop = False
     Me.grboxState.Text = "State"
@@ -716,7 +524,7 @@ Partial Class frmMain
     Me.GroupBox7.Controls.Add(Me.lblAudioConnectionsCount)
     Me.GroupBox7.Controls.Add(Me.txtAudioConnections)
     Me.GroupBox7.Controls.Add(Me.txtAudioPort)
-    Me.GroupBox7.Location = New System.Drawing.Point(837, 12)
+    Me.GroupBox7.Location = New System.Drawing.Point(668, 12)
     Me.GroupBox7.Name = "GroupBox7"
     Me.GroupBox7.Size = New System.Drawing.Size(167, 374)
     Me.GroupBox7.TabIndex = 22
@@ -782,20 +590,28 @@ Partial Class frmMain
     Me.chkUpdateNeedleTime.Text = "Keep Updated"
     Me.chkUpdateNeedleTime.UseVisualStyleBackColor = True
     '
-    'timerScanIO
-    '
-    Me.timerScanIO.Interval = 10
-    '
     'GroupBox8
     '
     Me.GroupBox8.Controls.Add(Me.chkUseRunoutSaver)
     Me.GroupBox8.Controls.Add(Me.CheckBox1)
-    Me.GroupBox8.Location = New System.Drawing.Point(837, 397)
+    Me.GroupBox8.Location = New System.Drawing.Point(431, 222)
     Me.GroupBox8.Name = "GroupBox8"
-    Me.GroupBox8.Size = New System.Drawing.Size(167, 83)
+    Me.GroupBox8.Size = New System.Drawing.Size(223, 83)
     Me.GroupBox8.TabIndex = 24
     Me.GroupBox8.TabStop = False
     Me.GroupBox8.Text = "Other"
+    '
+    'chkUseRunoutSaver
+    '
+    Me.chkUseRunoutSaver.AutoSize = True
+    Me.chkUseRunoutSaver.Checked = True
+    Me.chkUseRunoutSaver.CheckState = System.Windows.Forms.CheckState.Checked
+    Me.chkUseRunoutSaver.Location = New System.Drawing.Point(7, 52)
+    Me.chkUseRunoutSaver.Name = "chkUseRunoutSaver"
+    Me.chkUseRunoutSaver.Size = New System.Drawing.Size(149, 17)
+    Me.chkUseRunoutSaver.TabIndex = 27
+    Me.chkUseRunoutSaver.Text = "Locked-groove Protection"
+    Me.chkUseRunoutSaver.UseVisualStyleBackColor = True
     '
     'CheckBox1
     '
@@ -812,23 +628,11 @@ Partial Class frmMain
     'timerRunoutSaver
     '
     '
-    'chkUseRunoutSaver
-    '
-    Me.chkUseRunoutSaver.AutoSize = True
-    Me.chkUseRunoutSaver.Checked = True
-    Me.chkUseRunoutSaver.CheckState = System.Windows.Forms.CheckState.Checked
-    Me.chkUseRunoutSaver.Location = New System.Drawing.Point(7, 52)
-    Me.chkUseRunoutSaver.Name = "chkUseRunoutSaver"
-    Me.chkUseRunoutSaver.Size = New System.Drawing.Size(149, 17)
-    Me.chkUseRunoutSaver.TabIndex = 27
-    Me.chkUseRunoutSaver.Text = "Locked-groove Protection"
-    Me.chkUseRunoutSaver.UseVisualStyleBackColor = True
-    '
     'frmMain
     '
     Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
     Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-    Me.ClientSize = New System.Drawing.Size(1021, 535)
+    Me.ClientSize = New System.Drawing.Size(858, 535)
     Me.Controls.Add(Me.GroupBox8)
     Me.Controls.Add(Me.chkUpdateNeedleTime)
     Me.Controls.Add(Me.GroupBox7)
@@ -845,7 +649,6 @@ Partial Class frmMain
     Me.Name = "frmMain"
     Me.Text = "SeeburgControl"
     Me.GroupBox3.ResumeLayout(False)
-    Me.GroupBox3.PerformLayout()
     Me.GroupBox1.ResumeLayout(False)
     Me.GroupBox1.PerformLayout()
     Me.GroupBox2.ResumeLayout(False)
@@ -868,18 +671,12 @@ Partial Class frmMain
   End Sub
   Friend WithEvents cmdQuit As System.Windows.Forms.Button
   Friend WithEvents GroupBox3 As System.Windows.Forms.GroupBox
-  Friend WithEvents txtComLog As System.Windows.Forms.TextBox
-  Friend WithEvents cmdQuery As System.Windows.Forms.Button
-  Friend WithEvents txtQuery As System.Windows.Forms.TextBox
-  Friend WithEvents Relay As System.Windows.Forms.Button
-  Friend WithEvents ComOpen As System.Windows.Forms.Button
   Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
   Friend WithEvents cmdRelayMomentary_1 As System.Windows.Forms.Button
   Friend WithEvents chkRelayStatus1 As System.Windows.Forms.CheckBox
   Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
   Friend WithEvents cmdRelayMomentary_2 As System.Windows.Forms.Button
   Friend WithEvents chkRelayStatus2 As System.Windows.Forms.CheckBox
-  Friend WithEvents ComClose As System.Windows.Forms.Button
   Friend WithEvents GroupBox4 As System.Windows.Forms.GroupBox
   Friend WithEvents txtHTTPLog As System.Windows.Forms.TextBox
   Friend WithEvents cmdTestHTTP As System.Windows.Forms.Button
@@ -887,13 +684,9 @@ Partial Class frmMain
   Friend WithEvents txtTestHTTP As System.Windows.Forms.TextBox
   Friend WithEvents cmdStartHTTP As System.Windows.Forms.Button
   Friend WithEvents cmdStopHTTP As System.Windows.Forms.Button
-  Friend WithEvents chkShowComLog As System.Windows.Forms.CheckBox
   Friend WithEvents chkShowHTTPLog As System.Windows.Forms.CheckBox
-  Friend WithEvents lnkClearComLog As System.Windows.Forms.LinkLabel
   Friend WithEvents lnkClearHTTPLog As System.Windows.Forms.LinkLabel
   Friend WithEvents chkAutoStartHTTP As System.Windows.Forms.CheckBox
-  Friend WithEvents txtComPort As System.Windows.Forms.TextBox
-  Friend WithEvents cmdVersion As System.Windows.Forms.Button
   Friend WithEvents GroupBox5 As System.Windows.Forms.GroupBox
   Friend WithEvents txtMinutesToAdd As System.Windows.Forms.TextBox
   Friend WithEvents lblMinutesLeft As System.Windows.Forms.Label
@@ -922,14 +715,6 @@ Partial Class frmMain
   Friend WithEvents txtAudioPort As System.Windows.Forms.TextBox
   Friend WithEvents lblAudioConnectionsCount As System.Windows.Forms.Label
   Friend WithEvents chkUpdateNeedleTime As System.Windows.Forms.CheckBox
-  Friend WithEvents chkKeepIOsUpdated As System.Windows.Forms.CheckBox
-  Friend WithEvents timerScanIO As System.Windows.Forms.Timer
-  Friend WithEvents radIO_4 As System.Windows.Forms.RadioButton
-  Friend WithEvents radIO_5 As System.Windows.Forms.RadioButton
-  Friend WithEvents lnkResetCounter As System.Windows.Forms.LinkLabel
-  Friend WithEvents txtCounter As System.Windows.Forms.TextBox
-  Friend WithEvents chkIO_7 As System.Windows.Forms.CheckBox
-  Friend WithEvents chkIO_6 As System.Windows.Forms.CheckBox
   Friend WithEvents chkSetStandbyAtLaunch As System.Windows.Forms.CheckBox
   Friend WithEvents GroupBox8 As System.Windows.Forms.GroupBox
   Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
@@ -937,5 +722,5 @@ Partial Class frmMain
   Friend WithEvents lblConnectionLastSeenAt As System.Windows.Forms.Label
   Friend WithEvents timerRunoutSaver As System.Windows.Forms.Timer
   Friend WithEvents chkUseRunoutSaver As System.Windows.Forms.CheckBox
-
+  Friend WithEvents cboDevices As ComboBox
 End Class

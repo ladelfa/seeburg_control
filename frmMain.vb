@@ -6,7 +6,8 @@ Imports System.Net.NetworkInformation
 Imports System.Runtime.Serialization.Formatters.Soap
 
 Public Class frmMain
-  Private WithEvents m_oComBoard As clsComBoard
+  'Private WithEvents m_oComBoard As clsComBoard
+  Private m_oUsbRelay As clsUsbRelayDevice
   Private WithEvents m_oWebServer As clsWebServer
   Private WithEvents m_oPlayTimer As clsPlayTimer
   Private WithEvents m_oNeedleTimeCounter As New clsNeedleTimeCounter
@@ -37,7 +38,6 @@ Public Class frmMain
     With Settings
       txtHTTPPort.Text = .Port_HTTP
       chkShowHTTPLog.Checked = .ShowLogs_HTTP
-      chkShowComLog.Checked = .ShowLogs_Com
       chkAutoStartHTTP.Checked = .StartHTTPAtStartup
       chkEnablePlayTimer.Checked = .EnablePlayTimer
       txtStatusCgiUrl.Text = .StatusCgiUrl
@@ -47,8 +47,14 @@ Public Class frmMain
       txtMinutesToAdd.Text = .DefaultMinutesToAddViaButton
     End With
 
-    m_oComBoard = New clsComBoard
-    txtComPort.Text = m_oComBoard.PortName
+    clsUsbRelayDevice.Init()
+    Dim serials As List(Of String) = clsUsbRelayDevice.GetSerialNumbers
+    ' TODO populate cbo with multiple device serials, allow choosing
+    cboDevices.Items.Add(serials.First)
+    cboDevices.SelectedIndex = 0
+
+
+    m_oUsbRelay = New clsUsbRelayDevice(serials.First)
 
     m_oWebServer = New clsWebServer
     m_oPlayTimer = New clsPlayTimer
@@ -57,9 +63,6 @@ Public Class frmMain
 
     timerRefreshPowerControl.Interval = 1000
     timerRefreshPowerControl.Start()
-
-    timerScanIO.Interval = 10
-    timerScanIO.Start()
 
     timerRunoutSaver.Enabled = False
 
@@ -71,7 +74,9 @@ Public Class frmMain
       .Items.AddRange({"off", "standby", "public_play", "home_play", "maintenance"})
       .SelectedIndex = 0
     End With
+
     UpdateRelayStatuses()
+
     GetStateFromRemote()
   End Sub
 
@@ -79,7 +84,6 @@ Public Class frmMain
   Private Sub MyBase_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
     With Settings
       .Port_HTTP = CInt(txtHTTPPort.Text)
-      .ShowLogs_Com = chkShowComLog.Checked
       .ShowLogs_HTTP = chkShowHTTPLog.Checked
       .StartHTTPAtStartup = chkAutoStartHTTP.Checked
       .EnablePlayTimer = chkEnablePlayTimer.Checked
@@ -90,6 +94,9 @@ Public Class frmMain
       .DefaultMinutesToAddViaButton = txtMinutesToAdd.Text
     End With
 
+    m_oUsbRelay = Nothing
+    clsUsbRelayDevice.Destroy()
+
     Dim myFileStream As Stream = File.Create("settings.xml")
     Dim serializer As New SoapFormatter()
     serializer.Serialize(myFileStream, Settings)
@@ -97,32 +104,18 @@ Public Class frmMain
   End Sub
 
 
-  Private Sub Relay_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-    m_oComBoard.RelayTest()
-  End Sub
-
   Private Sub CloseRelayMomentarily(ByVal iWhichRelay As Integer, Optional ByVal lLength As Integer = 300)
-    If m_oComBoard.SetRelay(iWhichRelay, True) Then UpdateRelayStatuses()
+    If m_oUsbRelay.TurnOnRelay(iWhichRelay) Then UpdateRelayStatuses()
     Threading.Thread.Sleep(lLength)
-    If m_oComBoard.SetRelay(iWhichRelay, False) Then UpdateRelayStatuses()
+    If m_oUsbRelay.TurnOffRelay(iWhichRelay) Then UpdateRelayStatuses()
   End Sub
 
   Private Sub UpdateRelayStatuses()
-    chkRelayStatus1.Checked = m_oComBoard.RelayIsClosed(1)
-    chkRelayStatus2.Checked = m_oComBoard.RelayIsClosed(2)
+    chkRelayStatus1.Checked = m_oUsbRelay.RelayIsOn(1)
+    chkRelayStatus2.Checked = m_oUsbRelay.RelayIsOn(2)
   End Sub
 
-  Private Sub ComOpen_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComOpen.Click
-    Dim isOpen As Boolean = m_oComBoard.OpenPort()
-    Relay.Enabled = isOpen      ' "Relay" button
-    ComClose.Enabled = isOpen   ' "Close Port" button
-  End Sub
 
-  Private Sub ComClose_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComClose.Click
-    Dim isClosed As Boolean = m_oComBoard.ClosePort()
-    Relay.Enabled = Not isClosed      ' "Relay" button
-    ComClose.Enabled = Not isClosed   ' "Close Port" button
-  End Sub
 
   Private Sub cmdRelayMomentary_1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdRelayMomentary_1.Click
     CloseRelayMomentarily(1)
@@ -133,32 +126,17 @@ Public Class frmMain
   End Sub
 
   Private Sub chkRelayStatus1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkRelayStatus1.CheckedChanged
-    m_oComBoard.SetRelay(1, chkRelayStatus1.Checked)
+    m_oUsbRelay.SetRelay(1, chkRelayStatus1.Checked)
   End Sub
 
   Private Sub chkRelayStatus2_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkRelayStatus2.CheckedChanged
-    m_oComBoard.SetRelay(2, chkRelayStatus2.Checked)
+    m_oUsbRelay.SetRelay(2, chkRelayStatus2.Checked)
   End Sub
 
-  Private Sub cmdQuery_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdQuery.Click
-    m_oComBoard.GetResponse(txtQuery.Text)
-  End Sub
 
   Private Sub cmdQuit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdQuit.Click
-    m_oComBoard.ClosePort()
     Me.Close()
   End Sub
-
-  Private Sub lnkClearComLog_LinkClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles lnkClearComLog.LinkClicked
-    txtComLog.Clear()
-  End Sub
-
-  Private Sub txtQuery_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles txtQuery.KeyDown
-    If e.KeyCode = Keys.Enter Then
-      cmdQuery.PerformClick()
-    End If
-  End Sub
-
 
   Private Sub cmdStartHTTP_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdStartHTTP.Click
     m_oWebServer.StartListening(CInt(txtHTTPPort.Text))
@@ -181,12 +159,8 @@ Public Class frmMain
     txtHTTPLog.Clear()
   End Sub
 
-  Private Sub m_oComBoard_DebugStatement(ByVal t As String) Handles m_oComBoard.DebugStatement
-    If chkShowComLog.Checked Then txtComLog.AppendText(t & vbCrLf)
-  End Sub
-
-  Private Sub cmdVersion_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdVersion.Click
-    m_oComBoard.GetResponse("vers")
+  Private Sub cmdVersion_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    clsUsbRelayDevice.LibVersion()
   End Sub
 
   Private Sub m_oWebServer_DebugStatement(ByVal t As String) Handles m_oWebServer.DebugStatement
@@ -237,9 +211,11 @@ Public Class frmMain
           tResponse = "Machine cannot be controlled at this time."
         End If
 
-      Case "/test", "/version"
-        tResponse = m_oComBoard.GetResponse("vers")
-        m_oComBoard.ClosePort()
+      Case "/test"
+        tResponse = "OK"
+
+      Case "/version"
+        tResponse = clsUsbRelayDevice.LibVersion
 
       Case "/add_time"
         If bMachineIsControllable Then
@@ -287,13 +263,11 @@ Public Class frmMain
 
   Private Sub RejectRecord()
     CloseRelayMomentarily(1) ' Reject record
-    m_oComBoard.ClosePort()
   End Sub
 
   Private Sub PowerUp()
-    m_oComBoard.SetRelay(2, True) 'Power up
+    m_oUsbRelay.TurnOnRelay(2) 'Power up
     UpdateRelayStatuses()
-    m_oComBoard.ClosePort()
   End Sub
 
   Private Sub PowerUpAndDisableTimer()
@@ -303,21 +277,19 @@ Public Class frmMain
   End Sub
 
   Private Sub PowerDownAfterCurrentRecord()
-    m_oComBoard.SetRelay(2, False) ' Power down 
+    m_oUsbRelay.TurnOffRelay(2) ' Power down 
     UpdateRelayStatuses()
-    m_oComBoard.ClosePort()
     m_oPlayTimer.ClearTime()
     EngageRunoutSaver()
   End Sub
 
   Private Sub PowerDownImmediately()
-    m_oComBoard.SetRelay(1, True)  ' Reject record
-    m_oComBoard.SetRelay(2, False) ' Power down
+    m_oUsbRelay.TurnOnRelay(1) ' Reject record
+    m_oUsbRelay.TurnOffRelay(2) ' Power down 
     UpdateRelayStatuses()
     Threading.Thread.Sleep(2000)   ' Wait 2 seconds
-    m_oComBoard.SetRelay(1, False) ' Release relay
+    m_oUsbRelay.TurnOffRelay(1) ' Release relay
     UpdateRelayStatuses()
-    m_oComBoard.ClosePort()
     m_oPlayTimer.ClearTime()
   End Sub
 
@@ -366,7 +338,7 @@ Public Class frmMain
   End Sub
   ' Keeps track of the total number of minutes the 
   Private Sub UpdateNeedleTimeCounter()
-    If m_oComBoard.RelayIsClosed(2) Then
+    If m_oUsbRelay.RelayIsOn(2) Then
       m_oNeedleTimeCounter.CurrentlyOn()
     Else
       m_oNeedleTimeCounter.CurrentlyOff()
@@ -526,47 +498,7 @@ Public Class frmMain
     Return DateDiff(DateInterval.Second, m_dLastAudioConnectionSeenAt, Now)
   End Function
 
-  Private Sub timerScanIO_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles timerScanIO.Tick
-    If chkKeepIOsUpdated.Checked Then UpdateIOs()
-  End Sub
 
-  Private Sub UpdateIOs()
-    With m_oComBoard
-      radIO_4.Checked = .IOState(4)
-      radIO_5.Checked = .IOState(5)
-      '      chkIO_6.Checked = .IOState(6) ' If you read port 6, you freeze the counter.
-      chkIO_7.Checked = .IOState(7)
-      txtCounter.Text = .CounterValue
-
-      If .IOState(5) Then
-        If Not m_bLastStateIO5 Then
-          m_bLastStateIO5 = True
-          cmdAddMinutes.PerformClick()
-        End If
-      Else
-        m_bLastStateIO5 = False
-      End If
-
-    End With
-
-  End Sub
-
-  Private Sub lnkResetCounter_LinkClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles lnkResetCounter.LinkClicked
-    m_oComBoard.ResetCounter()
-  End Sub
-
-  Private Sub txtCounter_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles txtCounter.Click
-    txtCounter.Text = m_oComBoard.CounterValue
-  End Sub
-
-
-  Private Sub chkIO_6_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles chkIO_6.Click
-    m_oComBoard.SetIOState(6, chkIO_6.Checked)
-  End Sub
-
-  Private Sub chkIO_7_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles chkIO_7.Click
-    m_oComBoard.SetIOState(7, chkIO_7.Checked)
-  End Sub
 
   Private Sub EngageRunoutSaver()
     ' Prevents a record that won't auto-reject (locked groove, too wide a runout, etc.) from playing
@@ -584,4 +516,6 @@ Public Class frmMain
     timerRunoutSaver.Stop()
     timerRunoutSaver.Enabled = False
   End Sub
+
+
 End Class
